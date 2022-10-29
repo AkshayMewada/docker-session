@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  webapp:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - backend
+    volumes:
+      - .:/app
+
+  db:
+    image: mysql:5.7
+    restart: always
+    networks:
+      - backend
+    ports:
+      - "3307:3306"
+      - "33070:33060"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - mysqlvolumne:/var/lib/mysql
+
+networks:
+    backend:
+        driver: bridge
+
+volumes:
+    mysqlvolumne:
+        driver: local
